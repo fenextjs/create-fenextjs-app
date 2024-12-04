@@ -74,7 +74,7 @@ program
     console.log('Actualizando create-fenextjs-app...');
 
     
-    if (shell.exec('npm install -g create-fenextjs-app').code !== 0) {
+    if (shell.exec('npm uninstall -g create-fenextjs-app && npm install -g create-fenextjs-app').code !== 0) {
       console.error('Error al actualizar create-fenextjs-app.');
       shell.exit(1);
     }
