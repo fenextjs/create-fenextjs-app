@@ -6,36 +6,32 @@ const fs = require('fs');
 const path = require('path');
 const inquirer = require('inquirer');
 
-program.version('1.0.0').description('CLI para crear proyectos Fenextjs');
+// Definir la versión del CLI
+program.version('1.0.0').description('CLI para crear y gestionar proyectos Fenextjs');
 
+// Comando `init`
 program
   .command('init <projectName>')
   .description('Crea un nuevo proyecto Fenextjs')
   .action(async (projectName) => {
     console.log(`Iniciando proyecto ${projectName}...`);
 
-    // Clonar el repositorio base
     const repoUrl = `https://github.com/fenextjs/template`;
     if (shell.exec(`git clone --depth 1 ${repoUrl} ${projectName}`).code !== 0) {
       console.error('Error al clonar el repositorio.');
       shell.exit(1);
     }
 
-    // Cambiar al directorio del proyecto
     process.chdir(`./${projectName}`);
     console.log(`Directorio cambiado a ${process.cwd()}`);
 
-    // Eliminar el .git del template
     shell.rm('-rf', '.git');
-
-    // Inicializar un nuevo repositorio git
     if (shell.exec('git init').code !== 0) {
       console.error('Error al inicializar git.');
       shell.exit(1);
     }
-    
-    // Preguntar al usuario por la URL del repositorio Git
-    const { gitUrl } = await inquirer.default.prompt([
+
+    const { gitUrl } = await inquirer.prompt([
       {
         type: 'input',
         name: 'gitUrl',
@@ -45,7 +41,6 @@ program
     ]);
 
     if (gitUrl) {
-      // Asignar la URL del repositorio remoto
       if (shell.exec(`git remote add origin ${gitUrl}`).code !== 0) {
         console.error('Error al asignar la URL del repositorio.');
         shell.exit(1);
@@ -53,7 +48,6 @@ program
       console.log(`Repositorio remoto asignado: ${gitUrl}`);
     }
 
-    // Leer y actualizar el package.json
     const packageJsonPath = path.join(process.cwd(), 'package.json');
     if (fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
@@ -72,4 +66,24 @@ program
     console.log('Proyecto creado exitosamente.');
   });
 
+// Comando `update`
+program
+  .command('update')
+  .description('Actualiza el CLI de create-fenextjs-app a la última versión')
+  .action(() => {
+    console.log('Actualizando create-fenextjs-app...');
+
+    if (shell.exec('npm uninstall -g create-fenextjs-app').code !== 0) {
+      console.error('Error al eliminar create-fenextjs-app.');
+      shell.exit(1);
+    }
+    if (shell.exec('npm install -g create-fenextjs-app').code !== 0) {
+      console.error('Error al actualizar create-fenextjs-app.');
+      shell.exit(1);
+    }
+
+    console.log('create-fenextjs-app actualizado con éxito.');
+  });
+
+// Parsear argumentos
 program.parse(process.argv);
