@@ -7,7 +7,7 @@ const path = require('path');
 const inquirer = require('inquirer');
 
 // Definir la versión del CLI
-program.version('1.0.6').description('CLI para crear y gestionar proyectos Fenextjs');
+program.version('1.0.7').description('CLI para crear y gestionar proyectos Fenextjs');
 
 // Comando `init`
 program
@@ -73,14 +73,12 @@ program
   .action(() => {
     console.log('Actualizando create-fenextjs-app...');
 
-    if (shell.exec('npm uninstall -g create-fenextjs-app').code !== 0) {
-      console.error('Error al eliminar create-fenextjs-app.');
-      shell.exit(1);
-    }
+    
     if (shell.exec('npm install -g create-fenextjs-app').code !== 0) {
       console.error('Error al actualizar create-fenextjs-app.');
       shell.exit(1);
     }
+
 
     console.log('create-fenextjs-app actualizado con éxito.');
   });
