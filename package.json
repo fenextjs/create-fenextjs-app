@@ -18,5 +18,17 @@
   "bugs": {
     "url": "https://github.com/fenextjs/create-fenextjs-app/issues"
   },
-  "homepage": "https://github.com/fenextjs/create-fenextjs-app#readme"
+  "homepage": "https://github.com/fenextjs/create-fenextjs-app#readme",
+  "bin": {
+    "create-fenextjs-app": "./index.js"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "inquirer": "^12.1.0",
+    "shelljs": "^0.8.5"
+  },
+  "files": [
+    "./index.js"
+  ]
 }
