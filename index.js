@@ -7,7 +7,7 @@ const path = require('path');
 const inquirer = require('inquirer');
 
 // Definir la versión del CLI
-program.version('1.0.0').description('CLI para crear y gestionar proyectos Fenextjs');
+program.version('1.0.6').description('CLI para crear y gestionar proyectos Fenextjs');
 
 // Comando `init`
 program
