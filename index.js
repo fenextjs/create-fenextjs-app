@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-// const inquirer = require('inquirer');
 const shell = require('shelljs');
 
 // Define la versión del CLI
@@ -14,22 +13,31 @@ program
   .action(async (projectName) => {
     console.log(`Iniciando proyecto ${projectName}...`);
 
-    // Preguntas interactivas
-    // const answers = await inquirer.prompt([
-    //   {
-    //     type: 'list',
-    //     name: 'template',
-    //     message: 'Selecciona un template:',
-    //     choices: ['Basic', 'E-Commerce', 'Blog'],
-    //   },
-    // ]);
-
-    // console.log(chalk.blue(`Template seleccionado: ${answers.template}`));
-
-    // Clonar un template desde un repositorio (opcional)
+    // Clonar un template desde un repositorio (sin historial git)
     const repoUrl = `https://github.com/fenextjs/template`;
-    if (shell.exec(`git clone ${repoUrl} ${projectName}`).code !== 0) {
+    if (shell.exec(`git clone --depth 1 ${repoUrl} ${projectName}`).code !== 0) {
       console.error('Error al clonar el repositorio.');
+      shell.exit(1);
+    }
+
+    // Cambiar al directorio del proyecto
+    try {
+      process.chdir(`./${projectName}`);
+      console.log(`Directorio cambiado a ${process.cwd()}`);
+    } catch (err) {
+      console.error(`Error al cambiar de directorio: ${err.message}`);
+      shell.exit(1);
+    }
+
+    // Eliminar el directorio .git
+    if (shell.rm('-rf', '.git').code !== 0) {
+      console.error('Error al eliminar el directorio .git.');
+      shell.exit(1);
+    }
+
+    // Inicializar un nuevo repositorio git (opcional)
+    if (shell.exec('git init').code !== 0) {
+      console.error('Error al inicializar git.');
       shell.exit(1);
     }
 
