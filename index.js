@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const chalk = require('chalk');
 // const inquirer = require('inquirer');
 const shell = require('shelljs');
 
@@ -13,7 +12,7 @@ program
   .command('init <projectName>')
   .description('Crea un nuevo proyecto Fenextjs')
   .action(async (projectName) => {
-    console.log(chalk.green(`Iniciando proyecto ${projectName}...`));
+    console.log(`Iniciando proyecto ${projectName}...`);
 
     // Preguntas interactivas
     // const answers = await inquirer.prompt([
@@ -30,11 +29,11 @@ program
     // Clonar un template desde un repositorio (opcional)
     const repoUrl = `https://github.com/fenextjs/template`;
     if (shell.exec(`git clone ${repoUrl} ${projectName}`).code !== 0) {
-      console.error(chalk.red('Error al clonar el repositorio.'));
+      console.error('Error al clonar el repositorio.');
       shell.exit(1);
     }
 
-    console.log(chalk.green('Proyecto creado exitosamente.'));
+    console.log('Proyecto creado exitosamente.');
   });
 
 // Parsear argumentos
