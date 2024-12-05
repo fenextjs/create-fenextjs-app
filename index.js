@@ -6,6 +6,38 @@ const fs = require('fs');
 const path = require('path');
 const inquirer = require('inquirer');
 
+const generateColorTerminal = (n) => `\x1b[${n}m%s\x1b[0m`;
+
+const COLORS = {
+    Reset: generateColorTerminal(0),
+    Bright: generateColorTerminal(1),
+    Dim: generateColorTerminal(2),
+    Underscore: generateColorTerminal(4),
+    Blink: generateColorTerminal(5),
+    Reverse: generateColorTerminal(7),
+    Hidden: generateColorTerminal(8),
+
+    FgBlack: generateColorTerminal(30),
+    FgRed: generateColorTerminal(31),
+    FgGreen: generateColorTerminal(32),
+    FgYellow: generateColorTerminal(33),
+    FgBlue: generateColorTerminal(34),
+    FgMagenta: generateColorTerminal(35),
+    FgCyan: generateColorTerminal(36),
+    FgWhite: generateColorTerminal(37),
+    FgGray: generateColorTerminal(90),
+
+    BgBlack: generateColorTerminal(40),
+    BgRed: generateColorTerminal(41),
+    BgGreen: generateColorTerminal(42),
+    BgYellow: generateColorTerminal(43),
+    BgBlue: generateColorTerminal(44),
+    BgMagenta: generateColorTerminal(45),
+    BgCyan: generateColorTerminal(46),
+    BgWhite: generateColorTerminal(47),
+    BgGray: generateColorTerminal(100),
+};
+
 // Definir la versión del CLI
 program.version('1.0.9').description('CLI para crear y gestionar proyectos Fenextjs');
 
@@ -14,24 +46,19 @@ program
   .command('init <projectName>')
   .description('Crea un nuevo proyecto Fenextjs')
   .action(async (projectName) => {
-    console.log(`Iniciando proyecto ${projectName}...`);
+    console.log(COLORS.FgCyan, `Iniciando proyecto ${projectName}...`);
 
+    console.log(COLORS.FgCyan, `Clonando https://github.com/fenextjs/template`);
     const repoUrl = `https://github.com/fenextjs/template`;
     if (shell.exec(`git clone --depth 1 ${repoUrl} ${projectName}`).code !== 0) {
-      console.error('Error al clonar el repositorio.');
+      console.error(COLORS.FgRed, 'Error al clonar el repositorio.');
       shell.exit(1);
     }
 
     process.chdir(`./${projectName}`);
-    console.log(`Directorio cambiado a ${process.cwd()}`);
 
     shell.rm('-rf', '.git');
-    if (shell.exec('git init').code !== 0) {
-      console.error('Error al inicializar git.');
-      shell.exit(1);
-    }
-
-    const { gitUrl } = await inquirer.prompt([
+    const { gitUrl } = await inquirer.default.prompt([
       {
         type: 'input',
         name: 'gitUrl',
@@ -41,11 +68,16 @@ program
     ]);
 
     if (gitUrl) {
-      if (shell.exec(`git remote add origin ${gitUrl}`).code !== 0) {
-        console.error('Error al asignar la URL del repositorio.');
+      console.log(COLORS.FgCyan, `Iniciando Git`);
+      if (shell.exec('git init').code !== 0) {
+        console.error(COLORS.FgRed, 'Error al inicializar git.');
         shell.exit(1);
       }
-      console.log(`Repositorio remoto asignado: ${gitUrl}`);
+      if (shell.exec(`git remote add origin ${gitUrl}`).code !== 0) {
+        console.error(COLORS.FgRed, 'Error al asignar la URL del repositorio.');
+        shell.exit(1);
+      }
+      console.log(COLORS.FgGreen, `Repositorio remoto asignado: ${gitUrl}`);
     }
 
     const packageJsonPath = path.join(process.cwd(), 'package.json');
@@ -58,12 +90,12 @@ program
         packageJson.homepage = `${gitUrl}#readme`;
       }
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-      console.log('Archivo package.json actualizado.');
+      console.log(COLORS.FgYellow, 'Archivo package.json actualizado.');
     } else {
-      console.warn('No se encontró package.json para actualizar.');
+      console.warn(COLORS.FgRed, 'No se encontró package.json para actualizar.');
     }
 
-    console.log('Proyecto creado exitosamente.');
+    console.log(COLORS.FgBright, 'Proyecto creado exitosamente.');
   });
 
 // Comando `update`
@@ -71,16 +103,14 @@ program
   .command('update')
   .description('Actualiza el CLI de create-fenextjs-app a la última versión')
   .action(() => {
-    console.log('Actualizando create-fenextjs-app...');
+    console.log(COLORS.FgBlue, 'Actualizando create-fenextjs-app...');
 
-    
     if (shell.exec('npm uninstall -g create-fenextjs-app && npm install -g create-fenextjs-app').code !== 0) {
-      console.error('Error al actualizar create-fenextjs-app.');
+      console.error(COLORS.FgRed, 'Error al actualizar create-fenextjs-app.');
       shell.exit(1);
     }
 
-
-    console.log('create-fenextjs-app actualizado con éxito.');
+    console.log(COLORS.FgGreen, 'create-fenextjs-app actualizado con éxito.');
   });
 
 // Parsear argumentos
