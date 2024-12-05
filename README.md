@@ -1,10 +1,10 @@
 # create-fenextjs-app
 
-Un CLI para crear rápidamente proyectos basados en Fenextjs con templates predefinidos.
+Una CLI para crear rápidamente proyectos basados en Fenextjs con templates predefinidos.
 
 ## Instalación
 
-Asegúrate de tener [Node.js](https://nodejs.org) instalado en tu sistema.
+Asegúrate de tener [Nodejs](https://nodejs.org) instalado en tu sistema.
 
 Instala el paquete globalmente:
 
@@ -43,11 +43,16 @@ Una vez creado el proyecto, tendrás una estructura similar a esta:
 
 ```
 mi-nuevo-proyecto/
+├── .storybook/
+│   ├── main.ts
+│   └── preview.tsx
 ├── public/
-├── src/
+├── src
 │   ├── components/
+│   ├── languages/
 │   ├── pages/
-├── └── styles/
+│   └── ui-fenextjs/
+├── styles/
 ├── .eslintrc.json
 ├── .gitignore
 ├── next.config.js
@@ -55,6 +60,31 @@ mi-nuevo-proyecto/
 ├── README.md
 └── tsconfig.json
 ```
+
+## Estilos
+
+Cuando agregues o cambies estilos ejecuta el siguiente comando para actualizar CSS:
+
+```bash
+npm run sass
+```
+
+## Compilar
+
+Para compilar el proyecto y asegurarte que cumpla con los estándares de format y lint, puedes usar el siguiente comando:
+
+```bash
+npm run flb
+```
+
+## Actualización
+
+Una vez creado el proyecto, si necesitas actualizar fenextjs puedes ejecutar el siguiente comando dentro de "projectName"
+
+```bash
+npm run u
+```
+
 
 ## Documentation
 
