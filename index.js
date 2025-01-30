@@ -48,8 +48,8 @@ program
   .action(async (projectName) => {
     console.log(COLORS.FgCyan, `Iniciando proyecto ${projectName}...`);
 
-    console.log(COLORS.FgCyan, `Clonando https://github.com/fenextjs/template`);
-    const repoUrl = `https://github.com/fenextjs/template`;
+    console.log(COLORS.FgCyan, `Clonando https://github.com/fenextjs/fenextjs-template`);
+    const repoUrl = `https://github.com/fenextjs/fenextjs-template`;
     if (shell.exec(`git clone --depth 1 ${repoUrl} ${projectName}`).code !== 0) {
       console.error(COLORS.FgRed, 'Error al clonar el repositorio.');
       shell.exit(1);
