@@ -105,7 +105,7 @@ program
   .action(() => {
     console.log(COLORS.FgBlue, 'Actualizando create-fenextjs-app...');
 
-    if (shell.exec('npm uninstall -g create-fenextjs-app && npm install -g create-fenextjs-app').code !== 0) {
+    if (shell.exec('npm update -g create-fenextjs-app && npm uninstall -g create-fenextjs-app && npm install -g create-fenextjs-app').code !== 0) {
       console.error(COLORS.FgRed, 'Error al actualizar create-fenextjs-app.');
       shell.exit(1);
     }
