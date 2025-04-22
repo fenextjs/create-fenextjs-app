@@ -39,7 +39,7 @@ const COLORS = {
 };
 
 // Definir la versión del CLI
-program.version('2.0.2').description('CLI para crear y gestionar proyectos Fenextjs');
+program.version('2.0.3').description('CLI para crear y gestionar proyectos Fenextjs');
 
 // Comando `init`
 program
