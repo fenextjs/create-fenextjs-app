@@ -47,9 +47,17 @@ program
   .description('Crea un nuevo proyecto Fenextjs')
   .action(async (projectName) => {
     console.log(COLORS.FgCyan, `Iniciando proyecto ${projectName}...`);
-
-    console.log(COLORS.FgCyan, `Clonando https://github.com/fenextjs/fenextjs-template`);
-    const repoUrl = `https://github.com/fenextjs/fenextjs-template`;
+    const { framework } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'framework',
+        message: '¿Qué framework quieres usar?',
+        choices: ['nextjs', 'vite'],
+      },
+    ]);
+    
+    const repoUrl = `https://github.com/fenextjs/fenextjs-template-${framework}`;
+    console.log(COLORS.FgCyan, `Clonando ${repoUrl}`);
     if (shell.exec(`git clone --depth 1 ${repoUrl} ${projectName}`).code !== 0) {
       console.error(COLORS.FgRed, 'Error al clonar el repositorio.');
       shell.exit(1);
